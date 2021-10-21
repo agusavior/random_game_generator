@@ -9,55 +9,66 @@ part of 'moor_database.dart';
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
 class Node extends DataClass implements Insertable<Node> {
   final int id;
-  final String name;
+  final String data;
   final int number;
-  final int backId;
-  final int nextId;
-  final int nrefs;
+  final double position;
+  final int timerCounter;
+  final int red;
+  final int green;
+  final int blue;
   Node(
       {required this.id,
-      required this.name,
+      required this.data,
       required this.number,
-      required this.backId,
-      required this.nextId,
-      required this.nrefs});
+      required this.position,
+      required this.timerCounter,
+      required this.red,
+      required this.green,
+      required this.blue});
   factory Node.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
+    final doubleType = db.typeSystem.forDartType<double>();
     return Node(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name'])!,
+      data: stringType.mapFromDatabaseResponse(data['${effectivePrefix}data'])!,
       number:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}number'])!,
-      backId:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}back_id'])!,
-      nextId:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}next_id'])!,
-      nrefs: intType.mapFromDatabaseResponse(data['${effectivePrefix}nrefs'])!,
+      position: doubleType
+          .mapFromDatabaseResponse(data['${effectivePrefix}position'])!,
+      timerCounter: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}timer_counter'])!,
+      red: intType.mapFromDatabaseResponse(data['${effectivePrefix}red'])!,
+      green: intType.mapFromDatabaseResponse(data['${effectivePrefix}green'])!,
+      blue: intType.mapFromDatabaseResponse(data['${effectivePrefix}blue'])!,
     );
   }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['name'] = Variable<String>(name);
+    map['data'] = Variable<String>(data);
     map['number'] = Variable<int>(number);
-    map['back_id'] = Variable<int>(backId);
-    map['next_id'] = Variable<int>(nextId);
-    map['nrefs'] = Variable<int>(nrefs);
+    map['position'] = Variable<double>(position);
+    map['timer_counter'] = Variable<int>(timerCounter);
+    map['red'] = Variable<int>(red);
+    map['green'] = Variable<int>(green);
+    map['blue'] = Variable<int>(blue);
     return map;
   }
 
   NodesCompanion toCompanion(bool nullToAbsent) {
     return NodesCompanion(
       id: Value(id),
-      name: Value(name),
+      data: Value(data),
       number: Value(number),
-      backId: Value(backId),
-      nextId: Value(nextId),
-      nrefs: Value(nrefs),
+      position: Value(position),
+      timerCounter: Value(timerCounter),
+      red: Value(red),
+      green: Value(green),
+      blue: Value(blue),
     );
   }
 
@@ -66,11 +77,13 @@ class Node extends DataClass implements Insertable<Node> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Node(
       id: serializer.fromJson<int>(json['id']),
-      name: serializer.fromJson<String>(json['name']),
+      data: serializer.fromJson<String>(json['data']),
       number: serializer.fromJson<int>(json['number']),
-      backId: serializer.fromJson<int>(json['backId']),
-      nextId: serializer.fromJson<int>(json['nextId']),
-      nrefs: serializer.fromJson<int>(json['nrefs']),
+      position: serializer.fromJson<double>(json['position']),
+      timerCounter: serializer.fromJson<int>(json['timerCounter']),
+      red: serializer.fromJson<int>(json['red']),
+      green: serializer.fromJson<int>(json['green']),
+      blue: serializer.fromJson<int>(json['blue']),
     );
   }
   @override
@@ -78,38 +91,46 @@ class Node extends DataClass implements Insertable<Node> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'name': serializer.toJson<String>(name),
+      'data': serializer.toJson<String>(data),
       'number': serializer.toJson<int>(number),
-      'backId': serializer.toJson<int>(backId),
-      'nextId': serializer.toJson<int>(nextId),
-      'nrefs': serializer.toJson<int>(nrefs),
+      'position': serializer.toJson<double>(position),
+      'timerCounter': serializer.toJson<int>(timerCounter),
+      'red': serializer.toJson<int>(red),
+      'green': serializer.toJson<int>(green),
+      'blue': serializer.toJson<int>(blue),
     };
   }
 
   Node copyWith(
           {int? id,
-          String? name,
+          String? data,
           int? number,
-          int? backId,
-          int? nextId,
-          int? nrefs}) =>
+          double? position,
+          int? timerCounter,
+          int? red,
+          int? green,
+          int? blue}) =>
       Node(
         id: id ?? this.id,
-        name: name ?? this.name,
+        data: data ?? this.data,
         number: number ?? this.number,
-        backId: backId ?? this.backId,
-        nextId: nextId ?? this.nextId,
-        nrefs: nrefs ?? this.nrefs,
+        position: position ?? this.position,
+        timerCounter: timerCounter ?? this.timerCounter,
+        red: red ?? this.red,
+        green: green ?? this.green,
+        blue: blue ?? this.blue,
       );
   @override
   String toString() {
     return (StringBuffer('Node(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
+          ..write('data: $data, ')
           ..write('number: $number, ')
-          ..write('backId: $backId, ')
-          ..write('nextId: $nextId, ')
-          ..write('nrefs: $nrefs')
+          ..write('position: $position, ')
+          ..write('timerCounter: $timerCounter, ')
+          ..write('red: $red, ')
+          ..write('green: $green, ')
+          ..write('blue: $blue')
           ..write(')'))
         .toString();
   }
@@ -118,79 +139,102 @@ class Node extends DataClass implements Insertable<Node> {
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
       $mrjc(
-          name.hashCode,
+          data.hashCode,
           $mrjc(
               number.hashCode,
               $mrjc(
-                  backId.hashCode, $mrjc(nextId.hashCode, nrefs.hashCode))))));
+                  position.hashCode,
+                  $mrjc(
+                      timerCounter.hashCode,
+                      $mrjc(red.hashCode,
+                          $mrjc(green.hashCode, blue.hashCode))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Node &&
           other.id == this.id &&
-          other.name == this.name &&
+          other.data == this.data &&
           other.number == this.number &&
-          other.backId == this.backId &&
-          other.nextId == this.nextId &&
-          other.nrefs == this.nrefs);
+          other.position == this.position &&
+          other.timerCounter == this.timerCounter &&
+          other.red == this.red &&
+          other.green == this.green &&
+          other.blue == this.blue);
 }
 
 class NodesCompanion extends UpdateCompanion<Node> {
   final Value<int> id;
-  final Value<String> name;
+  final Value<String> data;
   final Value<int> number;
-  final Value<int> backId;
-  final Value<int> nextId;
-  final Value<int> nrefs;
+  final Value<double> position;
+  final Value<int> timerCounter;
+  final Value<int> red;
+  final Value<int> green;
+  final Value<int> blue;
   const NodesCompanion({
     this.id = const Value.absent(),
-    this.name = const Value.absent(),
+    this.data = const Value.absent(),
     this.number = const Value.absent(),
-    this.backId = const Value.absent(),
-    this.nextId = const Value.absent(),
-    this.nrefs = const Value.absent(),
+    this.position = const Value.absent(),
+    this.timerCounter = const Value.absent(),
+    this.red = const Value.absent(),
+    this.green = const Value.absent(),
+    this.blue = const Value.absent(),
   });
   NodesCompanion.insert({
     this.id = const Value.absent(),
-    required String name,
+    this.data = const Value.absent(),
     required int number,
-    this.backId = const Value.absent(),
-    this.nextId = const Value.absent(),
-    this.nrefs = const Value.absent(),
-  })  : name = Value(name),
-        number = Value(number);
+    required double position,
+    this.timerCounter = const Value.absent(),
+    required int red,
+    required int green,
+    required int blue,
+  })   : number = Value(number),
+        position = Value(position),
+        red = Value(red),
+        green = Value(green),
+        blue = Value(blue);
   static Insertable<Node> custom({
     Expression<int>? id,
-    Expression<String>? name,
+    Expression<String>? data,
     Expression<int>? number,
-    Expression<int>? backId,
-    Expression<int>? nextId,
-    Expression<int>? nrefs,
+    Expression<double>? position,
+    Expression<int>? timerCounter,
+    Expression<int>? red,
+    Expression<int>? green,
+    Expression<int>? blue,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (name != null) 'name': name,
+      if (data != null) 'data': data,
       if (number != null) 'number': number,
-      if (backId != null) 'back_id': backId,
-      if (nextId != null) 'next_id': nextId,
-      if (nrefs != null) 'nrefs': nrefs,
+      if (position != null) 'position': position,
+      if (timerCounter != null) 'timer_counter': timerCounter,
+      if (red != null) 'red': red,
+      if (green != null) 'green': green,
+      if (blue != null) 'blue': blue,
     });
   }
 
   NodesCompanion copyWith(
       {Value<int>? id,
-      Value<String>? name,
+      Value<String>? data,
       Value<int>? number,
-      Value<int>? backId,
-      Value<int>? nextId,
-      Value<int>? nrefs}) {
+      Value<double>? position,
+      Value<int>? timerCounter,
+      Value<int>? red,
+      Value<int>? green,
+      Value<int>? blue}) {
     return NodesCompanion(
       id: id ?? this.id,
-      name: name ?? this.name,
+      data: data ?? this.data,
       number: number ?? this.number,
-      backId: backId ?? this.backId,
-      nextId: nextId ?? this.nextId,
-      nrefs: nrefs ?? this.nrefs,
+      position: position ?? this.position,
+      timerCounter: timerCounter ?? this.timerCounter,
+      red: red ?? this.red,
+      green: green ?? this.green,
+      blue: blue ?? this.blue,
     );
   }
 
@@ -200,20 +244,26 @@ class NodesCompanion extends UpdateCompanion<Node> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
+    if (data.present) {
+      map['data'] = Variable<String>(data.value);
     }
     if (number.present) {
       map['number'] = Variable<int>(number.value);
     }
-    if (backId.present) {
-      map['back_id'] = Variable<int>(backId.value);
+    if (position.present) {
+      map['position'] = Variable<double>(position.value);
     }
-    if (nextId.present) {
-      map['next_id'] = Variable<int>(nextId.value);
+    if (timerCounter.present) {
+      map['timer_counter'] = Variable<int>(timerCounter.value);
     }
-    if (nrefs.present) {
-      map['nrefs'] = Variable<int>(nrefs.value);
+    if (red.present) {
+      map['red'] = Variable<int>(red.value);
+    }
+    if (green.present) {
+      map['green'] = Variable<int>(green.value);
+    }
+    if (blue.present) {
+      map['blue'] = Variable<int>(blue.value);
     }
     return map;
   }
@@ -222,11 +272,13 @@ class NodesCompanion extends UpdateCompanion<Node> {
   String toString() {
     return (StringBuffer('NodesCompanion(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
+          ..write('data: $data, ')
           ..write('number: $number, ')
-          ..write('backId: $backId, ')
-          ..write('nextId: $nextId, ')
-          ..write('nrefs: $nrefs')
+          ..write('position: $position, ')
+          ..write('timerCounter: $timerCounter, ')
+          ..write('red: $red, ')
+          ..write('green: $green, ')
+          ..write('blue: $blue')
           ..write(')'))
         .toString();
   }
@@ -244,12 +296,12 @@ class $NodesTable extends Nodes with TableInfo<$NodesTable, Node> {
         hasAutoIncrement: true, declaredAsPrimaryKey: true);
   }
 
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
+  final VerificationMeta _dataMeta = const VerificationMeta('data');
   @override
-  late final GeneratedTextColumn name = _constructName();
-  GeneratedTextColumn _constructName() {
-    return GeneratedTextColumn('name', $tableName, false,
-        minTextLength: 1, maxTextLength: 50);
+  late final GeneratedTextColumn data = _constructData();
+  GeneratedTextColumn _constructData() {
+    return GeneratedTextColumn('data', $tableName, false,
+        minTextLength: 0, maxTextLength: 50, defaultValue: Constant(""));
   }
 
   final VerificationMeta _numberMeta = const VerificationMeta('number');
@@ -263,33 +315,62 @@ class $NodesTable extends Nodes with TableInfo<$NodesTable, Node> {
     );
   }
 
-  final VerificationMeta _backIdMeta = const VerificationMeta('backId');
+  final VerificationMeta _positionMeta = const VerificationMeta('position');
   @override
-  late final GeneratedIntColumn backId = _constructBackId();
-  GeneratedIntColumn _constructBackId() {
-    return GeneratedIntColumn('back_id', $tableName, false,
+  late final GeneratedRealColumn position = _constructPosition();
+  GeneratedRealColumn _constructPosition() {
+    return GeneratedRealColumn(
+      'position',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _timerCounterMeta =
+      const VerificationMeta('timerCounter');
+  @override
+  late final GeneratedIntColumn timerCounter = _constructTimerCounter();
+  GeneratedIntColumn _constructTimerCounter() {
+    return GeneratedIntColumn('timer_counter', $tableName, false,
         defaultValue: Constant(0));
   }
 
-  final VerificationMeta _nextIdMeta = const VerificationMeta('nextId');
+  final VerificationMeta _redMeta = const VerificationMeta('red');
   @override
-  late final GeneratedIntColumn nextId = _constructNextId();
-  GeneratedIntColumn _constructNextId() {
-    return GeneratedIntColumn('next_id', $tableName, false,
-        defaultValue: Constant(0));
+  late final GeneratedIntColumn red = _constructRed();
+  GeneratedIntColumn _constructRed() {
+    return GeneratedIntColumn(
+      'red',
+      $tableName,
+      false,
+    );
   }
 
-  final VerificationMeta _nrefsMeta = const VerificationMeta('nrefs');
+  final VerificationMeta _greenMeta = const VerificationMeta('green');
   @override
-  late final GeneratedIntColumn nrefs = _constructNrefs();
-  GeneratedIntColumn _constructNrefs() {
-    return GeneratedIntColumn('nrefs', $tableName, false,
-        defaultValue: Constant(0));
+  late final GeneratedIntColumn green = _constructGreen();
+  GeneratedIntColumn _constructGreen() {
+    return GeneratedIntColumn(
+      'green',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _blueMeta = const VerificationMeta('blue');
+  @override
+  late final GeneratedIntColumn blue = _constructBlue();
+  GeneratedIntColumn _constructBlue() {
+    return GeneratedIntColumn(
+      'blue',
+      $tableName,
+      false,
+    );
   }
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, number, backId, nextId, nrefs];
+      [id, data, number, position, timerCounter, red, green, blue];
   @override
   $NodesTable get asDslTable => this;
   @override
@@ -304,11 +385,9 @@ class $NodesTable extends Nodes with TableInfo<$NodesTable, Node> {
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('name')) {
+    if (data.containsKey('data')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
+          _dataMeta, this.data.isAcceptableOrUnknown(data['data']!, _dataMeta));
     }
     if (data.containsKey('number')) {
       context.handle(_numberMeta,
@@ -316,17 +395,35 @@ class $NodesTable extends Nodes with TableInfo<$NodesTable, Node> {
     } else if (isInserting) {
       context.missing(_numberMeta);
     }
-    if (data.containsKey('back_id')) {
-      context.handle(_backIdMeta,
-          backId.isAcceptableOrUnknown(data['back_id']!, _backIdMeta));
+    if (data.containsKey('position')) {
+      context.handle(_positionMeta,
+          position.isAcceptableOrUnknown(data['position']!, _positionMeta));
+    } else if (isInserting) {
+      context.missing(_positionMeta);
     }
-    if (data.containsKey('next_id')) {
-      context.handle(_nextIdMeta,
-          nextId.isAcceptableOrUnknown(data['next_id']!, _nextIdMeta));
-    }
-    if (data.containsKey('nrefs')) {
+    if (data.containsKey('timer_counter')) {
       context.handle(
-          _nrefsMeta, nrefs.isAcceptableOrUnknown(data['nrefs']!, _nrefsMeta));
+          _timerCounterMeta,
+          timerCounter.isAcceptableOrUnknown(
+              data['timer_counter']!, _timerCounterMeta));
+    }
+    if (data.containsKey('red')) {
+      context.handle(
+          _redMeta, red.isAcceptableOrUnknown(data['red']!, _redMeta));
+    } else if (isInserting) {
+      context.missing(_redMeta);
+    }
+    if (data.containsKey('green')) {
+      context.handle(
+          _greenMeta, green.isAcceptableOrUnknown(data['green']!, _greenMeta));
+    } else if (isInserting) {
+      context.missing(_greenMeta);
+    }
+    if (data.containsKey('blue')) {
+      context.handle(
+          _blueMeta, blue.isAcceptableOrUnknown(data['blue']!, _blueMeta));
+    } else if (isInserting) {
+      context.missing(_blueMeta);
     }
     return context;
   }

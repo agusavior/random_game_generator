@@ -2,6 +2,8 @@
 
 My first flutter app.
 
+Using Moor for the database.
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

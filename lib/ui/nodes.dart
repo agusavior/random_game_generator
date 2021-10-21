@@ -1,7 +1,8 @@
 import 'package:first_flutter_app/data/moor_database.dart';
 import 'package:first_flutter_app/game/game.dart';
+import 'package:first_flutter_app/ui/node_clock.dart';
 import 'package:flutter/material.dart';
-
+import 'package:first_flutter_app/game/node_utils.dart';
 import 'package:flutter/widgets.dart';
 
 class Slot extends StatefulWidget {
@@ -25,22 +26,31 @@ class _SlotState extends State<Slot> {
         setState(() { hover = b; });
         return true;
       },
-      onAccept: (value) {
+      onAccept: (value) async {
+        Node nodeFrom = value;
+        Node nodeTo = widget.node;
+        await Game.instance.mergeEffect(nodeFrom, nodeTo);
         setState(() { hover = false; });
       },
       onLeave: (value) {
         setState(() { hover = false; });
       },
       builder: (context, data, rejectData) {
+        final color = Color(widget.node.getNumberColor());
         final base = Center(
           child: Text(
             '${widget.node.number}',
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headline5?.apply(
+                color: color,
+            ),
           ),
         );
+        final withClock = widget.node.hasTimerEffect()? Stack(
+          children: [base, NodeClock(percent: widget.node.getTimerPercent(),color: color)],
+        ): base;
         final withColor = Container(
-          child: base,
-          color: selected? Colors.amber : const Color(0xff2980b9),
+          child: withClock,
+          color: Color(widget.node.getColor()),
         );
         final withPadding = AnimatedPadding (
             padding: EdgeInsets.all(hover? 5 : 2),
@@ -54,15 +64,17 @@ class _SlotState extends State<Slot> {
           height: 64,
         );
         final withTapping = InkWell(
-            onTap: () {
+            onTap: () async {
               setState(() {
                 selected = !this.selected;
               });
-              _openModalBottomSheet(context);
+              Game.instance.pressEffect(widget.node);
+              // _openModalBottomSheet(context);
             },
             child: withFixedSize
         );
-        return LongPressDraggable(
+        // Poner LongPressDraggable en caso de ser mejor
+        return Draggable(
             child: withTapping,
             feedback: Opacity(opacity: 0.5, child: withFixedSize),
             childWhenDragging: withFixedSize,

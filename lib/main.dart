@@ -50,31 +50,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  List<int> numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-
   void _floatingActionButtonPressed() {
-    Game.instance.insert(8, "hola");
+    Game.instance.onFloatingButton();
+  }
+
+  void _restartPressed() {
+    Game.instance.restart();
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title!),
       ),
       body: Padding(
         padding: EdgeInsets.all(32),
         child: ListView(
           children: [
+            TextButton(onPressed: _restartPressed, child: Text("Restart"),),
             NodeListOrSplashWidget(),
           ]
         ),
